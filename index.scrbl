@@ -90,24 +90,23 @@ little on some built-in definitions in GOLD.
 
 The @racketmodname[parser-tools/lex] module provides tools for
 breaking down the contents of input ports into tokens.  Before we
-continue with the particulars LOLCODE parsing, let's play with this
+continue with the particulars of LOLCODE parsing, let's play with this
 library a bit, to get used to it.
 
 
-Let's first load in the @racketmodname[parser-tools/lex] library.  We can open
-up DrRacket and place in our definitions window the following content:
+Let's first load in the @racketmodname[parser-tools/lex] library.
+Even at this point, we can a very simple lexer, by using
+@racket[lexer-src-pos].  Let's make a stupid-simple one that doesn't
+know how to parse anything.  We can open up DrRacket and place in our
+definitions window the following content:
+
 @filebox["tokenizer.rkt"]{
 @codeblock|{
 #lang racket
 (require parser-tools/lex)
-;; We're beginning to work on the tokenizer...
+(define my-silly-lexer (lexer-src-pos [(eof) 'done]))
 }|}
 
-
-Even at this point, we can a very simple lexer, by using
-@racket[lexer-src-pos].  Let's make a stupid-simple one that doesn't
-know how to parse anything.
-@racketblock[(define my-silly-lexer (lexer-src-pos [(eof) 'done]))]
 @(my-evaluator '(define my-silly-lexer (lexer-src-pos [(eof) 'done])))
 
 
@@ -145,12 +144,13 @@ in those too.
 (position-col my-first-start-pos)
 ]
 
-But why are we getting @racket[#f] for the line and column?  That's
-because input ports don't automatically keep track of their line and
-column information, not unless we tell them to track this.
+But why are we getting @racket[#f] for the line and column?
+
+That's because input ports don't automatically keep track of their
+line and column information, not unless we tell them to track this.
 For now, let's force this tracking to happen on all ports by touching
-@racket[port-count-lines-enabled], which is a parameter that tells Racket
-what default to use when creating new ports.
+@racket[port-count-lines-enabled], which is a parameter that tells
+Racket what default to use when creating new ports.
 
 
 We'll want to add this following near the front of code that constructs
@@ -203,7 +203,13 @@ Let's play with it for a moment.
                (lexer-src-pos [WS 
                                (begin
                                  (printf "I see whitespace\n")
-                                 lexeme)]))]
+                                 lexeme)]))
+             (define my-simple-input-port (open-input-string "\t \n"))
+             (my-simple-whitespace-lexer my-simple-input-port)
+             (my-simple-whitespace-lexer my-simple-input-port)
+             (my-simple-whitespace-lexer my-simple-input-port)
+             (my-simple-whitespace-lexer my-simple-input-port)
+             ]
 
 
 
