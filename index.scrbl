@@ -69,16 +69,22 @@ lexers and parsers from high-level descriptions.
 
 @section{Baby steps}
 
+@subsection{Lexing with @racketmodname[parser-tools/lex]}
+
+@subsection{Parsing with @racketmodname[parser-tools/yacc]}
+
+
 
 
 @section{When good grammars go bad}
 
 
+
 @section{An application}
 
 Now that we have a better idea of how the @racketmodname[parser-tools]
-work, let's try this out.  We'll create a parser for the surface
-syntax of the @link["http://lolcode.com"]{LOLCODE} language.
+work, let's show how to create a parser for the surface syntax of the
+@link["http://lolcode.com"]{LOLCODE} language.
 
 
 @;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
