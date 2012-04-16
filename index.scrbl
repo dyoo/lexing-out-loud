@@ -10,7 +10,7 @@
 
 
 
-@title{Lexing Out Loud: parsing @tt{LOLCODE} with Racket's parser-tools}
+@title{Lexing out loud with Racket's @tt{parser-tools}}
 @author+email["Danny Yoo" "dyoo@hashcollision.org"]
 
 
@@ -27,23 +27,62 @@
 
 
 
-
 @;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 @section{Introduction}
 @;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-This is an extended example that shows how to use Racket's
-@seclink["top" #:doc '(lib
-"parser-tools/parser-tools.scrbl")]{parser-tools} library to create a
-parser for the @link["http://lolcode.com"]{LOLCODE} language.  We'll
-only consider the surface syntax of LOLCODE here.  If we have some
-time, maybe we can talk about how to write the semantics of LOLCODE in
-another tutorial.  Maybe.
 
+The @racketmodname[parser-tools] library tries to solve the following
+problem: given input in the form of an input port, how do we automate
+reconstruct structures out of the flat data?  For example, if we have
+an input port with the following content:
+
+@racketblock[(define my-sample-port (open-input-string "{ name : Danny, age : 33 }"))]
+
+we might want to translate this content into a hash structure.
+However, what we have is a value that can give us individual
+characters, such as @racket[#\{], @racket[#\D], or @racket[#\:]: we
+need to do some work to infer structure from these characters.
+
+
+Compilers traditionally take a two-pronged approach to attack this
+problem:
+@itemize[
+
+@item{Lexical analysis: break the input port into chunks of tokens.
+This can produce tokens for words, strings, numbers, punctuation, and
+other flat values.  Tools that do this analysis are called
+@emph{lexers}.}
+
+@item{Grammatical analysis: stitch together phrases of tokens into
+tree structures, based on a grammar.  Tools that do this analysis are
+called @emph{parsers}.}
+]
+
+Writing these tools by hand can be tedious, so Racket provides a
+library called @seclink["top" #:doc '(lib
+"parser-tools/parser-tools.scrbl")]{parser-tools} that can generate
+lexers and parsers from high-level descriptions.
+
+
+
+
+@section{Baby steps}
+
+
+
+@section{When good grammars go bad}
+
+
+@section{An application}
+
+Now that we have a better idea of how the @racketmodname[parser-tools]
+work, let's try this out.  We'll create a parser for the surface
+syntax of the @link["http://lolcode.com"]{LOLCODE} language.
 
 
 @;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-@section{The LOLCODE Grammar}
+@subsection{The LOLCODE Grammar}
 @;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 The
